@@ -54,22 +54,26 @@ public class RegistrationService {
 
     // Get all registrations for a specific user
     public List<Registration> getRegistrationsByUserId(Long userId) {
+        logger.info("Fetching registrations for user {}", userId);
         return registrationRepository.findByUserId(userId);
     }
 
     // Get all registrations for a specific event
     public List<Registration> getRegistrationsByEventId(Long eventId) {
+        logger.info("Fetching registrations for event {}", eventId);
         return registrationRepository.findByEventId(eventId);
     }
 
     // Get a specific registration by ID
     public Registration getRegistrationById(Long registrationId) {
+        logger.info("Fetching registration by ID {}", registrationId);
         return registrationRepository.findById(registrationId)
                 .orElseThrow(() -> new RuntimeException("Registration not found"));
     }
 
     // Delete a registration by its ID
     public void deleteRegistration(Long registrationId) {
+        logger.info("Deleting registration by ID {}", registrationId);
         registrationRepository.deleteById(registrationId);
     }
 }

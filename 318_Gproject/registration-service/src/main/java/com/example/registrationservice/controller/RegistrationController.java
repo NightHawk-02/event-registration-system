@@ -22,16 +22,19 @@ public class RegistrationController {
         return new ResponseEntity<>(registrationService.createRegistration(userId, eventId), HttpStatus.CREATED);
     }
 
-    // Get all registrations for a specific user
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Registration>> getRegistrationsByUserId(@PathVariable Long userId) {
-        return new ResponseEntity<>(registrationService.getRegistrationsByUserId(userId), HttpStatus.OK);
-    }
+    // Get all registrations, filtered by userId or eventId using query parameters
+    @GetMapping
+    public ResponseEntity<List<Registration>> getRegistrations(
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Long eventId) {
 
-    // Get all registrations for a specific event
-    @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<Registration>> getRegistrationsByEventId(@PathVariable Long eventId) {
-        return new ResponseEntity<>(registrationService.getRegistrationsByEventId(eventId), HttpStatus.OK);
+        if (userId != null) {
+            return new ResponseEntity<>(registrationService.getRegistrationsByUserId(userId), HttpStatus.OK);
+        } else if (eventId != null) {
+            return new ResponseEntity<>(registrationService.getRegistrationsByEventId(eventId), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Return 400 if no query parameters are provided
+        }
     }
 
     // Get a specific registration by ID
